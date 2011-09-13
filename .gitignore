@@ -34,3 +34,5 @@
 /magit.ps
 /magit-pkg.el
 magit.spec
+magit-notes/*
+

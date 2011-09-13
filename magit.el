@@ -536,13 +536,54 @@ Do not customize this (used in the `magit-key-mode' implementation).")
   "Face for selected options on magit's menu"
   :group 'magit-faces)
 
+
+;;; ==============================
+;; <Timestamp: #{2011-09-06T13:01:29-04:00Z}#{11362} - by MON>
+
+;;
+;; `magit-status-mode-map' 
+;; Things we know we'd like rebound:
+;; rebind `magit-apply-item' "a" to (kbd "M-g a")
+;; rebind `magit-discard-item' "k" to M-g k 
+;;
+;; rebind `magit-ignore-item' from "i" to  M-g i
+;; rebind `magit-ignore-item-locally' from "I" to M-g I
+;;
+;; rebind `magit-rebase-step' from "R" to M-g R
+;; rebind `magit-interactive-rebase' from "E" to M-g E
+   ;;
+;; rebind `magit-reset-head' from "x" to M-g x
+;; rebind `magit-reset-working-tree' "X" to M-g X
+   ;;
+;; rebind `magit-revert-item' from "V" to M-g V
+;; rebind `magit-diff-working-tree' from "d" to M-g d
+;; rebind `magit-diff' from "D" to M-g D
+   
+;; magit-stage-item from "s"  to M-g s
+;; magit-stage-all  from "S"  to M-g S
+;; magit-unstage-all from "U" to M-g U
+;;
+
+;; `magit-log-edit-mode-map' steps on C-c _way_ too much for my tastes...   
+;; `magit-log-edit-cancel-log-message' "C-c C-k" to ???  WTF!
+
+;; magit-add-change-log-entry
+;; magit-add-change-log-entry-other-window
+;; things were not sure about yet:
+;; rebind magit-goto-next-section "n" to M-g n -- ???
+;; rebind `magit-mark-item' from "." to ???
+;; rebind	magit-wazzup
+
+
 (defvar magit-mode-map
   (let ((map (make-keymap)))
     (suppress-keymap map t)
+    (define-key map (kbd "q") 'magit-quit-window)
     (define-key map (kbd "n") 'magit-goto-next-section)
     (define-key map (kbd "p") 'magit-goto-previous-section)
     (define-key map (kbd "TAB") 'magit-toggle-section)
     (define-key map (kbd "<backtab>") 'magit-expand-collapse-section)
+
     (define-key map (kbd "1") 'magit-show-level-1)
     (define-key map (kbd "2") 'magit-show-level-2)
     (define-key map (kbd "3") 'magit-show-level-3)
@@ -555,38 +596,74 @@ Do not customize this (used in the `magit-key-mode' implementation).")
     (define-key map (kbd "M-H") 'magit-show-only-files-all)
     (define-key map (kbd "M-s") 'magit-show-level-4)
     (define-key map (kbd "M-S") 'magit-show-level-4-all)
-    (define-key map (kbd "g") 'magit-refresh)
-    (define-key map (kbd "G") 'magit-refresh-all)
-    (define-key map (kbd "?") 'magit-describe-item)
-    (define-key map (kbd "!") 'magit-key-mode-popup-running)
-    (define-key map (kbd ":") 'magit-git-command)
-    (define-key map (kbd "C-x 4 a") 'magit-add-change-log-entry-other-window)
+
+    (define-key map (kbd "M-g ?") 'magit-describe-item)
+    (define-key map (kbd "M-g :") 'magit-git-command)
+    (define-key map (kbd "M-g $") 'magit-display-process)
+
+    ;; (define-key map (kbd "g") 'magit-refresh)
+    (define-key map (kbd "M-g g") 'magit-refresh)
+
+    ;; (define-key map (kbd "G") 'magit-refresh-all)
+    (define-key map (kbd "M-g G") 'magit-refresh-all)
+
+
     (define-key map (kbd "RET") 'magit-visit-item)
     (define-key map (kbd "SPC") 'magit-show-item-or-scroll-up)
     (define-key map (kbd "DEL") 'magit-show-item-or-scroll-down)
-    (define-key map (kbd "C-w") 'magit-copy-item-as-kill)
-    (define-key map (kbd "R") 'magit-rebase-step)
-    (define-key map (kbd "t") 'magit-key-mode-popup-tagging)
-    (define-key map (kbd "r") 'magit-key-mode-popup-rewriting)
+
+    ;; (define-key map (kbd "C-w") 'magit-copy-item-as-kill)
+    (define-key map (kbd "M-w") 'magit-copy-item-as-kill)
+
+    (define-key map (kbd "!") 'magit-key-mode-popup-running)
+    (define-key map (kbd "T") 'magit-key-mode-popup-tagging)
+    (define-key map (kbd "R") 'magit-key-mode-popup-rewriting)
     (define-key map (kbd "P") 'magit-key-mode-popup-pushing)
-    (define-key map (kbd "f") 'magit-key-mode-popup-fetching)
+    (define-key map (kbd "F") 'magit-key-mode-popup-fetching)
     (define-key map (kbd "b") 'magit-key-mode-popup-branching)
     (define-key map (kbd "B") 'magit-key-mode-popup-bisecting)
     (define-key map (kbd "F") 'magit-key-mode-popup-pulling)
-    (define-key map (kbd "l") 'magit-key-mode-popup-logging)
-    (define-key map (kbd "$") 'magit-display-process)
+    (define-key map (kbd "L") 'magit-key-mode-popup-logging)
+    (define-key map (kbd "M") 'magit-key-mode-popup-merging)
+
     (define-key map (kbd "c") 'magit-log-edit)
-    (define-key map (kbd "E") 'magit-interactive-rebase)
-    (define-key map (kbd "e") 'magit-ediff)
-    (define-key map (kbd "w") 'magit-wazzup)
-    (define-key map (kbd "q") 'magit-quit-window)
-    (define-key map (kbd "m") 'magit-key-mode-popup-merging)
-    (define-key map (kbd "x") 'magit-reset-head)
-    (define-key map (kbd "v") 'magit-revert-item)
-    (define-key map (kbd "a") 'magit-apply-item)
-    (define-key map (kbd "A") 'magit-cherry-pick-item)
-    (define-key map (kbd "d") 'magit-diff-working-tree)
-    (define-key map (kbd "D") 'magit-diff)
+
+    (define-key map (kbd "C-x 4 a") 'magit-add-change-log-entry-other-window) ;; :DEFAULT shadows `add-change-log-entry-other-window'
+    (define-key map (kbd "C-x 4 t") 'magit-add-change-log-entry-other-window) 
+    (define-key map (kbd "C-x 4 T") 'magit-add-change-log-entry) ;; shadow dvc-add-log-entry
+    (define-key map (kbd "C-x V a") 'magit-add-change-log-entry) ;; shadow dvc-add-log-entry
+    ;; (define-key map (kbd "C-x v a") 'magit-add-change-log-entry) ;; shadows vc-update-change-log
+
+    ;; (define-key map (kbd "E") 'magit-interactive-rebase)
+    (define-key map (kbd "M-g Ri") 'magit-interactive-rebase)
+
+    ;; (define-key map (kbd "R") 'magit-rebase-step)
+    (define-key map (kbd "M-g Rs") 'magit-rebase-step)
+
+    ;; (define-key map (kbd "w") 'magit-wazzup)
+    (define-key map (kbd "M-g w") 'magit-wazzup)
+
+    ;; (define-key map (kbd "x") 'magit-reset-head)
+    (define-key map (kbd "M-g x") 'magit-reset-head)
+
+    ;; (define-key map (kbd "v") 'magit-revert-item)
+    (define-key map (kbd "M-g v") 'magit-revert-item)
+
+    ;; (define-key map (kbd "a") 'magit-apply-item)
+    (define-key map (kbd "M-g a") 'magit-apply-item) 
+
+    ;; (define-key map (kbd "A") 'magit-cherry-pick-item)
+    (define-key map (kbd "M-g A") 'magit-cherry-pick-item)
+
+    ;; (define-key map (kbd "e") 'magit-ediff)
+    (define-key map (kbd "M-g e") 'magit-ediff)
+
+    ;; (define-key map (kbd "d") 'magit-diff-working-tree)
+    (define-key map (kbd "M-g d") 'magit-diff-working-tree)
+
+    ;; (define-key map (kbd "D") 'magit-diff)
+    (define-key map (kbd "M-g D") 'magit-diff)
+
     (define-key map (kbd "-") 'magit-diff-smaller-hunks)
     (define-key map (kbd "+") 'magit-diff-larger-hunks)
     (define-key map (kbd "0") 'magit-diff-default-hunks)
@@ -602,15 +679,24 @@ Do not customize this (used in the `magit-key-mode' implementation).")
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "s") 'magit-stage-item)
     (define-key map (kbd "S") 'magit-stage-all)
+
     (define-key map (kbd "u") 'magit-unstage-item)
     (define-key map (kbd "U") 'magit-unstage-all)
-    (define-key map (kbd "i") 'magit-ignore-item)
-    (define-key map (kbd "I") 'magit-ignore-item-locally)
+
+    ;; (define-key map (kbd "i") 'magit-ignore-item)
+    (define-key map (kbd "ii") 'magit-ignore-item)
+    ;; (define-key map (kbd "I") 'magit-ignore-item-locally)
+    (define-key map (kbd "II") 'magit-ignore-item-locally)
     (define-key map (kbd ".") 'magit-mark-item)
     (define-key map (kbd "=") 'magit-diff-with-mark)
-    (define-key map (kbd "k") 'magit-discard-item)
+    
+    ;; (define-key map (kbd "k") 'magit-discard-item)
+    (define-key map (kbd "kk") 'magit-discard-item)
+
     (define-key map (kbd "C") 'magit-add-log)
-    (define-key map (kbd "X") 'magit-reset-working-tree)
+
+    ;; (define-key map (kbd "X") 'magit-reset-working-tree)
+    (define-key map (kbd "X X") 'magit-reset-working-tree)
     (define-key map (kbd "z") 'magit-key-mode-popup-stashing)
     map))
 
@@ -625,15 +711,20 @@ Do not customize this (used in the `magit-key-mode' implementation).")
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd ".") 'magit-mark-item)
     (define-key map (kbd "=") 'magit-diff-with-mark)
-    (define-key map (kbd "i") 'magit-ignore-item)
+    ;; (define-key map (kbd "i") 'magit-ignore-item)
+    (define-key map (kbd "ii") 'magit-ignore-item)
     map))
 
 (defvar magit-show-branches-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "k") 'magit-remove-branch)
-    (define-key map (kbd "K") 'magit-remove-branch-in-remote-repo)
+    ;; (define-key map (kbd "k") 'magit-remove-branch)
+    ;; (define-key map (kbd "K") 'magit-remove-branch-in-remote-repo)
+    (define-key map (kbd "kk") 'magit-remove-branch)
+    (define-key map (kbd "KK") 'magit-remove-branch-in-remote-repo)
+
     (define-key map (kbd "v") 'magit-show-branches)
-    (define-key map (kbd "T") 'magit-change-what-branch-tracks)
+    ;; (define-key map (kbd "T") 'magit-change-what-branch-tracks)
+    (define-key map (kbd "TT") 'magit-change-what-branch-tracks)
     map))
 
 (defvar magit-bug-report-url
